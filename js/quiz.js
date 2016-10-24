@@ -12,17 +12,15 @@
     nextButtonEl: null,
     previousButtonEl: null,
     questionActiveClass: 'question-page--active',
-    _init: function(questions) {
-
+    questions: {},
+    render: function(questions) {
+      var _this  = this;
       var count;
-      var quizPage = $('#questionPages');
+      var questionsPlaceholder = $('<div/>');
       var buttonStr;
       var questionStr = '';
 
-      var questionsPlaceholder = $('<div/>');
-
       for(count = 0; count < questions.length; count++) {
-        console.log();
         var choices = questions[count].choices;
         var questionDiv = $('<div/>', {
           class: 'question-page',
@@ -32,7 +30,7 @@
 
         buttonStr = ''; //initialize
         choices.forEach(function(choice) {
-          buttonStr += '<button class="btn btn-primary">' + choice.text + '</button>';
+          buttonStr += '<button class="btn btn-primary" data-value="'+ choice.value +'">' + choice.text + '</button>';
         });
 
         questionDiv.append('<h3>'+ 'Question #' + (count + 1) +'</h3>');
@@ -40,17 +38,46 @@
         questionDiv.append('<div class="question-buttons btn-group">' + buttonStr + '</div>');
         questionDiv.appendTo(questionsPlaceholder);
 
+        questionDiv.click(function(event) {
+          var el = event.target;
+          var isAButton = el.tagName === 'BUTTON';
+          var value;
+          var questionIndex;
+          var question;
+
+          if(!isAButton) {
+            return;
+          }
+
+          value = $(el).attr('data-value');
+          questionIndex = $($('.'+_this.questionActiveClass)[0]).attr('data-index');
+          question = _this.questions[questionIndex];
+
+          console.log(question);
+
+          console.log(value);
+
+        });
+
       }
 
-      console.log(questionsPlaceholder);
+      return questionsPlaceholder;
 
+    },
+    _init: function(questions) {
+      var _this = this;
+      var count;
+      var quizPage = $('#questionPages');
+
+
+      this.questions = questions;
 
 
       this.el = $(this.selector);
       this.quizPages = $('.quiz-page');
       this.questionPagesContainer  = $('#questionPages');
 
-      this.questionPagesContainer.append(questionsPlaceholder.children());
+      this.questionPagesContainer.append(this.render(questions).children());
 
       this.questionPages = $('.question-page');
 
@@ -62,22 +89,19 @@
       this.nextButtonEl.click(function(event) {
         console.log('NEXT CLICKED');
         // validate answer before proceeding
-        this.nextQuestionPage(this);
+        _this.nextQuestionPage(_this);
 
-      }.bind(this));
+      });
       this.previousButtonEl.click(function(event){
         console.log('PREVIOUS CLICKED');
-        this.previousQuizPage(this);
-      }.bind(this));
+        _this.previousQuizPage(_this);
+      });
 
       $(this.questionPages[0]).addClass(this.questionActiveClass);
 
       console.log(this);
 
       return this;
-    },
-    gotoPage: function(pageName) {
-
     },
     nextQuestionPage: function(context) {
       var curr;
@@ -105,7 +129,7 @@
         console.log('END');
       }
     },
-    checkQuestion: function(pageNumber, answer) {
+    checkQuestion: function(questionIndex, answer) {
 
     }
   };
