@@ -12,7 +12,8 @@
     nextButtonEl: null,
     previousButtonEl: null,
     questionActiveClass: 'question-page--active',
-    questions: {},
+    questions: [],
+    progress: 0,
     render: function(questions) {
       var _this  = this;
       var count;
@@ -43,19 +44,16 @@
           var isAButton = el.tagName === 'BUTTON';
           var value;
           var questionIndex;
-          var question;
+          var answer;
 
           if(!isAButton) {
             return;
           }
 
-          value = $(el).attr('data-value');
-          questionIndex = $($('.'+_this.questionActiveClass)[0]).attr('data-index');
-          question = _this.questions[questionIndex];
-
-          console.log(question);
-
-          console.log(value);
+          answer = $(el).attr('data-value');
+          questionIndex = parseInt($($('.'+_this.questionActiveClass)[0]).attr('data-index'));
+          console.log(answer);
+          _this.checkQuestion(questionIndex, answer);
 
         });
 
@@ -94,7 +92,7 @@
       });
       this.previousButtonEl.click(function(event){
         console.log('PREVIOUS CLICKED');
-        _this.previousQuizPage(_this);
+        _this.previousQuestionPage(_this);
       });
 
       $(this.questionPages[0]).addClass(this.questionActiveClass);
@@ -117,7 +115,7 @@
         currentQuestion = context.questionPages.length - 1;
       }
     },
-    previousQuizPage: function(context) {
+    previousQuestionPage: function(context) {
       var curr;
 
       if(currentQuestion > 0) {
@@ -127,10 +125,20 @@
         $(curr).addClass(context.questionActiveClass);
       } else {
         console.log('END');
+        // go to end
       }
     },
     checkQuestion: function(questionIndex, answer) {
+      var question = this.questions[questionIndex];
+      var questionNumber = questionIndex + 1;
+      var isCorrect = question.correct == answer;
 
+      if(isCorrect) {
+        console.log('Correct Answer for Question#' + questionNumber);
+      } else {
+        console.warn('Wrong Answer for Question#' + questionNumber);
+      }
+      this.nextQuestionPage(this);
     }
   };
 
