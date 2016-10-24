@@ -1,6 +1,7 @@
 (function(document, window, $) {
   'use strict';
   var currentQuestion = 0;
+  var takeCount = 0;
   var quiz;
 
   quiz = {
@@ -14,6 +15,9 @@
     questionActiveClass: 'question-page--active',
     questions: [],
     progress: 0,
+    totalProgress: 0,
+    progressEl: null,
+    tally: [],
     render: function(questions) {
       var _this  = this;
       var count;
@@ -70,6 +74,9 @@
 
       this.questions = questions;
 
+      for(var qCount = 0; qCount <  questions.length; qCount++) {
+        this.tally[qCount] = 0;
+      }
 
       this.el = $(this.selector);
       this.quizPages = $('.quiz-page');
@@ -78,10 +85,15 @@
       this.questionPagesContainer.append(this.render(questions).children());
 
       this.questionPages = $('.question-page');
+      this.totalProgress = this.questionPages.length;
+      this.progressEl = $('#quizProgress');
 
 
       this.nextButtonEl = $('#nextQuestionButton');
       this.previousButtonEl = $('#prevQuestionButton');
+
+      $('#quizProgressLabel #currentQuestion').text(0);
+      $('#quizProgressLabel #totalQuestions').text(this.totalProgress);
 
 
       this.nextButtonEl.click(function(event) {
@@ -135,10 +147,14 @@
 
       if(isCorrect) {
         console.log('Correct Answer for Question#' + questionNumber);
+        this.tally[questionIndex]++;
       } else {
         console.warn('Wrong Answer for Question#' + questionNumber);
       }
+
       this.nextQuestionPage(this);
+      $('#quizProgressLabel #currentQuestion').text(currentQuestion);
+      console.log(this.tally);
     }
   };
 

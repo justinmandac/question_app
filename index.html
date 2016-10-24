@@ -37,16 +37,22 @@
           <div id="quiz" class="page page--active">
             <div id="quizQuestions" class="quiz-page">
               <div id="questionPages">
-  
+
               </div>
               <div id="quizButtons" class="quiz-buttons">
                 <button id="prevQuestionButton" class="btn btn-primary">Previous</button>
                 <button id="nextQuestionButton" class="btn btn-primary">Next</button>
               </div>
-              <div id="quizProgress">
-
+              <div class="quiz-progress-container">
+                <div class="quiz-progress-label" id="quizProgressLabel">
+                  Quiz Progress: <span id="currentQuestion"></span>/<span id="totalQuestions"></span>
+                </div>
+                <div class="progress">
+                  <div id="quizProgress" class="progress-bar progress-bar-striped active quiz-progress" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                  </div>
+                </div> <!-- progress -->
               </div>
-            </div>
+            </div> <!-- quiz-page -->
           </div>
         </div>
         <div class="sidebar">

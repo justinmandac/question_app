@@ -130,7 +130,14 @@ button {
   left: 0;
   position: relative;
 }
+.quiz-progress-container {
+  margin-top: 40px;
+}
 
+.quiz-progress-label {
+  padding-bottom: 10px;
+  text-align: center;
+}
 
 /**
    UTILITY CLASSES
