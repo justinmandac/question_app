@@ -3,6 +3,23 @@ $(function() {
   console.log(document);
   var quiz = window.quiz;
 
+  $('.page-link').click(function(event) {
+    var el = event.target;
+    var pageName = el.innerHTML.toLowerCase();
+    var pageTarget = $('#'+pageName);
+
+    //remove all active pages
+    var activePages = $('.page--active');
+
+    for(var c = 0; c < activePages.length; c++) {
+      $(activePages[c]).removeClass('page--active');
+    }
+
+    console.log(activePages);
+    pageTarget.addClass('page--active');
+
+    console.log(pageName);
+  });
 
   quiz._init([
     {

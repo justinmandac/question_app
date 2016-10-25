@@ -18,6 +18,10 @@
     totalProgress: 0,
     progressEl: null,
     tally: [],
+    resetProgressCounter() {
+      $('#quizProgressLabel #currentQuestion').text(0);
+      $('#quizProgressLabel #totalQuestions').text(this.totalProgress);
+    },
     render: function(questions) {
       var _this  = this;
       var count;
@@ -75,6 +79,8 @@
       this.questions = questions;
 
       for(var qCount = 0; qCount <  questions.length; qCount++) {
+        // add answered property to prevent users from abusing back + answer
+        this.questions[qCount].answered = false;
         this.tally[qCount] = 0;
       }
 
@@ -92,9 +98,8 @@
       this.nextButtonEl = $('#nextQuestionButton');
       this.previousButtonEl = $('#prevQuestionButton');
 
-      $('#quizProgressLabel #currentQuestion').text(0);
-      $('#quizProgressLabel #totalQuestions').text(this.totalProgress);
-
+      // initialize progress counters
+      this.resetProgressCounter();
 
       this.nextButtonEl.click(function(event) {
         console.log('NEXT CLICKED');
